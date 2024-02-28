@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "bot": "nodemon src/main.js"
+    "bot": "node src/main.js",
+    "dev": "nodemon src/main.js"
   },
   "keywords": [],
   "author": "",
