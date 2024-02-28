@@ -1,7 +1,8 @@
 require("dotenv").config();
 const teleBot = require("node-telegram-bot-api");
+
 const TOKEN = process.env.API_BOT_TOKEN;
-const BMKG_API_GEMPA = process.env.API_BMKG_GEMPA;
+const BMKG_GEMPA = process.env.API_BMKG_GEMPA;
 const BMKG_URL = process.env.BMKG_URL;
 
 const options = {
@@ -34,7 +35,7 @@ bot.onText(start, (txt) => {
 bot.onText(gempa, async (txt) => {
   const idBot = txt.from.id;
 
-  const apiCall = await fetch(BMKG_API_GEMPA);
+  const res = await fetch(BMKG_GEMPA);
   const {
     Infogempa: {
       gempa: {
@@ -51,26 +52,31 @@ bot.onText(gempa, async (txt) => {
         Shakemap,
       },
     },
-  } = await apiCall.json();
+  } = await res.json();
 
   const resultText = `
---------------------INFO GEMPA--------------------
+----------INFO GEMPA----------
 
 ${Tanggal} | ${Jam}
 
-------------------------------------------------------------
+----------------------------------------
 
-• Wilayah   : ${Wilayah}
-
-• Kekuatan  : ${Magnitude} SR
+• Kekuatan    : ${Magnitude} SR
 
 • Kedalaman : ${Kedalaman}
 
-• Potensi   : ${Potensi}
+----------------------------------------
+
+• Wilayah    : ${Wilayah}
+
+• Koordinat : ${Lintang} | ${Bujur}
+
+----------------------------------------
 
 • Dirasakan : ${Dirasakan}
 
-• Kordinat  : ${Lintang} | ${Bujur}
+• Potensi     : ${Potensi}
+
 `;
 
   bot.sendPhoto(idBot, BMKG_URL + Shakemap, {
